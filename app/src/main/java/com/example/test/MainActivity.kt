@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
+import android.widget.Button
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,13 +37,16 @@ import com.google.firebase.database.ValueEventListener
 data class Report(
     var longitude: Double? = 0.0,
     var latitude: Double? = 0.0,
-    var severity: Int? = 0,
-    var description: String? = ""
+    var severity: String? = "",
+    var description: String? = "",
+    var symptoms: String? = "",
+    var note: String? = ""
 )
 
 class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var database: DatabaseReference
+    public var toSend = Report()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -59,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        //button1 = findViewById<Button>(R.id.navigation_report)
         //More firebase code
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -128,9 +134,10 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location : Location? ->
                 Log.i("a", location?.altitude.toString())
                 //GRAB DATA FROM FORM INSTEAD OF JUST 0 AND EMPTY STRING
-                val user = Report(location?.latitude, location?.longitude, 0 , "")
+                val user = Report(location?.latitude, location?.longitude, toSend.severity , toSend.description, toSend.symptoms, toSend.note)
                 database.child((Math.random()).toString().replace(".", "F")).setValue(user)
-
+                val t = Toast.makeText(this,"Successfully sent report! Thank you for your time!", Toast.LENGTH_LONG)
+                t.show()
             }
     }
 

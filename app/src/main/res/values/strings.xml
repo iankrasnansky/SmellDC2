@@ -4,7 +4,7 @@
     <string name="title_map">Map</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
-    <string name="how_dows_your_air_smell_right_now">How dows your air smell right now?</string>
+    <string name="how_dows_your_air_smell_right_now">How does your air smell right now?</string>
     <string name="just_fine">Just Fine!</string>
     <string name="barely_noticeable">Barely Noticeable</string>
     <string name="noticeable">Noticeable</string>
@@ -14,7 +14,7 @@
     <string name="e_g_industrial_woodsmoke_rotten_eggs">e.g industrial,woodsmoke,rotten-eggs</string>
     <string name="example_industrial_woodsmoke">example: industrial, woodsmoke...</string>
     <string name="hint">hint</string>
-    <string name="any_systems_linked_to_the_odor">Any systems linked to the odor?</string>
+    <string name="any_symptoms_linked_to_the_odor">Any symptoms linked to the odor?</string>
     <string name="example_headache_sore_throat">example: headache, sore throat, ...</string>
     <string name="add_a_personal_note_to_the_health_department">Add a personal note to the Health Department</string>
     <string name="e_g_if_you_submit_more_than_one_report_in_the_same_day">e.g. if you submit more than one report in the same day</string>
