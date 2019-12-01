@@ -79,8 +79,26 @@ class MainActivity : AppCompatActivity() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 allReports = mutableListOf()
+                var dblLat: Double?
+                var dblLon: Double?
                 for (messageSnapshot in dataSnapshot.children) {
-                    allReports.add(Report(messageSnapshot.child("latitude").value as Double?, messageSnapshot.child("longitude").value as Double?, messageSnapshot.child("severity").value as String?, messageSnapshot.child("description").value as String?, messageSnapshot.child("symptoms").value as String?, messageSnapshot.child("note").value as String?))
+                    //Checks to allow for evened out coords (eg 31.000 or 100.000)
+                    if (messageSnapshot.child("latitude").value is Long){
+                        dblLat = (messageSnapshot.child("latitude").value as Long).toDouble()
+                    } else {
+                        dblLat = messageSnapshot.child("latitude").value as Double?
+                    }
+                    if (messageSnapshot.child("longitude").value is Long){
+                        dblLon = (messageSnapshot.child("longitude").value as Long).toDouble()
+                    } else {
+                        dblLon = messageSnapshot.child("longitude").value as Double?
+                    }
+
+                    allReports.add(Report(dblLat, dblLon,
+                        messageSnapshot.child("severity").value as String?,
+                        messageSnapshot.child("description").value as String?,
+                        messageSnapshot.child("symptoms").value as String?,
+                        messageSnapshot.child("note").value as String?))
                 }
 
             }

@@ -13,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -47,15 +48,28 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
         database.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 allReports = mutableListOf()
-                for (messageSnapshot in dataSnapshot.children){
-                    //get all the data from the database and store them in reports
-                    allReports.add(Report(messageSnapshot.child("latitude").value as Double?,
-                        messageSnapshot.child("longitude").value as Double?,
+                var dblLat: Double?
+                var dblLon: Double?
+                for (messageSnapshot in dataSnapshot.children) {
+                    //Checks to allow for evened out coords (eg 31.000 or 100.000)
+                    if (messageSnapshot.child("latitude").value is Long){
+                        dblLat = (messageSnapshot.child("latitude").value as Long).toDouble()
+                    } else {
+                        dblLat = messageSnapshot.child("latitude").value as Double?
+                    }
+                    if (messageSnapshot.child("longitude").value is Long){
+                        dblLon = (messageSnapshot.child("longitude").value as Long).toDouble()
+                    } else {
+                        dblLon = messageSnapshot.child("longitude").value as Double?
+                    }
+
+                    allReports.add(Report(dblLat, dblLon,
                         messageSnapshot.child("severity").value as String?,
                         messageSnapshot.child("description").value as String?,
                         messageSnapshot.child("symptoms").value as String?,
                         messageSnapshot.child("note").value as String?))
                 }
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -77,13 +91,39 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
             //Get the position to add the marker
             val location = LatLng(report.latitude!!, report.longitude!!)
 
+            //Associate a number with the smell severity to display it during in the snippet
+            var smellRatingNum = 1
+            //Change the color of the marker depending on the severity of the smell
+            var marker = MarkerOptions().position(location)
+            when (report.severity.toString()){
+                getString(R.string.just_fine) -> marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                getString(R.string.barely_noticeable) -> {
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                    smellRatingNum = 2
+                }
+                getString(R.string.noticeable) -> {
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                    smellRatingNum = 3
+                }
+                getString(R.string.its_getting_pretty_bad) -> {
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                    smellRatingNum = 4
+                }
+                getString(R.string.horrible) -> {
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    smellRatingNum = 5
+                }
+            }
+
             //Get the information associated with the report (ie severity, symptoms, description)
-            val info = "Smell Rating: " + report.severity.toString() +
+            val info = "Smell Rating: " + smellRatingNum.toString() + " (" + report.severity.toString() + ") " +
                     "\nSymptoms: " + report.symptoms.toString() +
                     "\nSmell Description: " + report.description.toString()
+            marker.snippet(info)
 
             //Add the marker to the map
-            mMap.addMarker(MarkerOptions().position(location).snippet(info))
+            mMap.addMarker(marker)
+//            mMap.addMarker(MarkerOptions().position(location).snippet(info))
         }
 
         //Zoom options
