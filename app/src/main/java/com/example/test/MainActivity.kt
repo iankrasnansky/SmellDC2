@@ -22,15 +22,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.IgnoreExtraProperties
+import com.google.firebase.database.*
+import com.google.firebase.database.snapshot.ChildKey
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.log
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ValueEventListener
-
+import java.time.LocalDateTime
 
 
 @IgnoreExtraProperties
@@ -46,6 +42,7 @@ data class Report(
 class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var database: DatabaseReference
+    private lateinit var allReports: MutableList<Report>
     public var toSend = Report()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,15 +69,14 @@ class MainActivity : AppCompatActivity() {
         //fab.setOnClickListener {
         //    getGeoData()
         //}
-
+        allReports= mutableListOf()
         database = FirebaseDatabase.getInstance().reference
         // Attach a listener to read the data at our posts reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                allReports = mutableListOf()
                 for (messageSnapshot in dataSnapshot.children) {
-                    val long = messageSnapshot.child("longitude").value as Double?
-                    println(long)
-                    //val message = messageSnapshot.child("message").value as String?
+                    allReports.add(Report(messageSnapshot.child("longitude").value as Double?, messageSnapshot.child("latitude").value as Double?, messageSnapshot.child("severity").value as String?, messageSnapshot.child("description").value as String?, messageSnapshot.child("symptoms").value as String?, messageSnapshot.child("note").value as String?))
                 }
 
             }
@@ -138,6 +134,16 @@ class MainActivity : AppCompatActivity() {
                 database.child((Math.random()).toString().replace(".", "F")).setValue(user)
                 val t = Toast.makeText(this,"Successfully sent report! Thank you for your time!", Toast.LENGTH_LONG)
                 t.show()
+
+                //Removal code
+                /*var now = LocalDateTime.now().dayOfYear
+                var cutoff = (now + 2).toDouble()
+                var ref = FirebaseDatabase.getInstance().reference
+                var old = ref.orderByChild("timestamp").endAt(cutoff).limitToLast(1).addChildEventListener({
+                    fun onChildAdded(snapshot: DataSnapshot, previousChildKey: ChildKey){
+                        snapshot.ref.removeValue()                   }
+                } as ChildEventListener)
+                */
             }
     }
 
