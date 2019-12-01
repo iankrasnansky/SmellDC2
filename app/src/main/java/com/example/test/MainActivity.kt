@@ -35,8 +35,8 @@ import com.google.firebase.database.ValueEventListener
 
 @IgnoreExtraProperties
 data class Report(
-    var longitude: Double? = 0.0,
     var latitude: Double? = 0.0,
+    var longitude: Double? = 0.0,
     var severity: String? = "",
     var description: String? = "",
     var symptoms: String? = "",
@@ -46,6 +46,7 @@ data class Report(
 class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var database: DatabaseReference
+    private lateinit var allReports: MutableList<Report>
     public var toSend = Report()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,15 +73,14 @@ class MainActivity : AppCompatActivity() {
         //fab.setOnClickListener {
         //    getGeoData()
         //}
-
+        allReports = mutableListOf()
         database = FirebaseDatabase.getInstance().reference
         // Attach a listener to read the data at our posts reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                allReports = mutableListOf()
                 for (messageSnapshot in dataSnapshot.children) {
-                    val long = messageSnapshot.child("longitude").value as Double?
-                    println(long)
-                    //val message = messageSnapshot.child("message").value as String?
+                    allReports.add(Report(messageSnapshot.child("latitude").value as Double?, messageSnapshot.child("longitude").value as Double?, messageSnapshot.child("severity").value as String?, messageSnapshot.child("description").value as String?, messageSnapshot.child("symptoms").value as String?, messageSnapshot.child("note").value as String?))
                 }
 
             }

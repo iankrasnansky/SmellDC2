@@ -13,6 +13,8 @@ import com.example.test.MainActivity
 import com.example.test.R
 import com.example.test.Report
 
+//THIS IS THE REPORT FRAGMENT
+
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
@@ -25,10 +27,7 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-       // val textView: TextView = root.findViewById(R.id.text_report)
-       // homeViewModel.text.observe(this, Observer {
-       //     textView.text = it
-       // })
+
         val RG = root.findViewById<RadioGroup>(R.id.radioG)
         val desc = root.findViewById<EditText>(R.id.answer2)
         val symp = root.findViewById<EditText>(R.id.answer3)
