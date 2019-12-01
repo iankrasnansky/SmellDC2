@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ScrollView01"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
+<RelativeLayout
+    android:layout_width="match_parent"
 android:layout_height="match_parent">
 
 <TextView
@@ -26,7 +26,7 @@ android:layout_height="match_parent">
     android:id="@+id/question1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
+    android:layout_marginStart="15dp"
     android:layout_marginTop="0dp"
     android:text="@string/how_dows_your_air_smell_right_now"
     android:textColor="#111010"
@@ -44,35 +44,48 @@ android:layout_height="match_parent">
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
     android:layout_marginTop="30dp"
-    android:layout_marginStart="5dp">
+    android:layout_marginStart="15dp">
 
     <RadioButton
         android:id="@+id/radioOne"
-        android:layout_width="wrap_content"
+        android:layout_width="169dp"
         android:layout_height="wrap_content"
-        android:text="@string/just_fine" />
+        android:background="#9CF172"
+        android:text="@string/just_fine"
+        android:textSize="16sp" />
+
 
     <RadioButton
         android:id="@+id/radioTwo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/barely_noticeable" />
+        android:background="#FFFF8D"
+        android:text="@string/barely_noticeable"
+        android:textSize="16sp" />
 
     <RadioButton
         android:id="@+id/radioThree"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/noticeable" />
+        android:background="#FB8D64"
+        android:text="@string/noticeable"
+        android:textSize="16sp" />
+
     <RadioButton
         android:id="@+id/radioFour"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/its_getting_pretty_bad" />
+        android:background="#FC77B7"
+        android:text="@string/its_getting_pretty_bad"
+        android:textSize="16sp" />
+
     <RadioButton
         android:id="@+id/radioFive"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/horrible" />
+        android:background="#E1284B"
+        android:text="@string/horrible"
+        android:textSize="16sp" />
 
 
 </RadioGroup>
@@ -81,83 +94,88 @@ android:layout_height="match_parent">
     android:id="@+id/question2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
+    android:layout_marginStart="15dp"
     android:layout_marginTop="195dp"
     android:text="@string/describe_the_smell_or_source_of_odor"
 
     android:textColor="#070707"
     android:textSize="20sp" />
 
-<EditText
-    android:id="@+id/answer2"
-    android:layout_width="309dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="220dp"
-    android:ems="10"
-    android:importantForAutofill="no"
-    android:inputType="text"
-    android:text="@string/example_industrial_woodsmoke"
-    android:textColor="#B3B3B3"
-    tools:ignore="LabelFor" />
+    <EditText
+        android:id="@+id/answer2"
+        android:layout_width="371dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="225dp"
+        android:background="@drawable/input_background"
+        android:ems="10"
+        android:hint="@string/example_industrial_woodsmoke"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textColor="#050505"
+        tools:ignore="LabelFor" />
 
-<TextView
+    <TextView
     android:id="@+id/question3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="270dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginTop="272dp"
     android:text="@string/any_symptoms_linked_to_the_odor"
     android:textColor="#070707"
     android:textSize="20sp" />
 
-<EditText
-    android:id="@+id/answer3"
-    android:layout_width="309dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="310dp"
-    android:ems="10"
-    android:importantForAutofill="no"
-    android:inputType="text"
-    android:text="@string/example_headache_sore_throat"
-    android:textColor="#B3B3B3"
-    tools:ignore="LabelFor" />
+    <EditText
+        android:id="@+id/answer3"
+        android:layout_width="373dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="310dp"
+        android:background="@drawable/input_background"
+        android:ems="10"
+        android:hint="@string/example_headache_sore_throat"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textColor="#090808"
+        tools:ignore="LabelFor" />
 
 <TextView
     android:id="@+id/question4"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
+    android:layout_marginStart="15dp"
     android:layout_marginTop="362dp"
     android:text="@string/add_a_personal_note_to_the_health_department"
     android:textColor="#070707"
     android:textSize="20sp" />
 
-<EditText
-    android:id="@+id/editText3"
-    android:layout_width="398dp"
-    android:layout_height="74dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="430dp"
-    android:autofillHints=""
-    android:ems="10"
-    android:gravity="start|top"
-    android:inputType="textMultiLine"
-    android:text="@string/e_g_if_you_submit_more_than_one_report_in_the_same_day"
-    android:textColor="#B3B3B3"
-    tools:ignore="LabelFor"
+    <EditText
+        android:id="@+id/answer4"
+        android:layout_width="379dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="430dp"
+        android:autofillHints=""
+        android:background="@drawable/input_background"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/e_g_if_you_submit_more_than_one_report_in_the_same_day"
+        android:inputType="textMultiLine"
+        android:textAlignment="textStart"
+        android:textColor="#030303"
 
 
-    />
+        tools:ignore="LabelFor" />
 
-<Button
-    android:id="@+id/button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/send_smell_report"
-    android:layout_marginTop="510dp"
-    android:layout_marginStart="120dp"/>
+    <Button
+
+        android:id="@+id/submitButton"
+        android:layout_width="213dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="515dp"
+        android:background="@drawable/submit_button"
+        android:text="@string/send_smell_report" />
 
 
 </RelativeLayout>

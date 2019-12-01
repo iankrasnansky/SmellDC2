@@ -32,9 +32,9 @@ class HomeFragment : Fragment() {
         val RG = root.findViewById<RadioGroup>(R.id.radioG)
         val desc = root.findViewById<EditText>(R.id.answer2)
         val symp = root.findViewById<EditText>(R.id.answer3)
-        val note = root.findViewById<EditText>(R.id.editText3)
+        val note = root.findViewById<EditText>(R.id.answer4)
 
-        val b = root.findViewById<Button>(R.id.button)
+        val b = root.findViewById<Button>(R.id.submitButton)
         val mainAct = activity as MainActivity
         b.setOnClickListener {
             val selRad = root.findViewById<RadioButton>(RG.checkedRadioButtonId)
