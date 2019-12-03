@@ -26,6 +26,7 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var database: DatabaseReference
     private lateinit var allReports: MutableList<Report>
+    private var isMapReady = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,11 +64,15 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
                         dblLon = messageSnapshot.child("longitude").value as Double?
                     }
 
-                    allReports.add(Report(dblLat, dblLon,
+                    val report = Report(dblLat, dblLon,
                         messageSnapshot.child("severity").value as String?,
                         messageSnapshot.child("description").value as String?,
                         messageSnapshot.child("symptoms").value as String?,
-                        messageSnapshot.child("note").value as String?))
+                        messageSnapshot.child("note").value as String?)
+                    allReports.add(report)
+                    if (isMapReady){
+                        placeMarker(report)
+                    }
                 }
 
             }
@@ -81,6 +86,7 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        isMapReady = true
         mMap = googleMap
 
         var customInfoWindow = CustomInfoWindow()
@@ -127,8 +133,46 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
         }
 
         //Zoom options
-//        var zoomLevel = 0.0f
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(38.9, -76.9), zoomLevel))
+        var zoomLevel = 3.0f
+        val kansas = LatLng(37.697948, -97.314835) //place the camera over the middle of the US
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kansas, zoomLevel))
+    }
+
+    fun placeMarker(reportEntry: Report) {
+        val location = LatLng(reportEntry.latitude!!, reportEntry.longitude!!)
+
+        //Associate a number with the smell severity to display it during in the snippet
+        var smellRatingNum = 1
+        //Change the color of the marker depending on the severity of the smell
+        var marker = MarkerOptions().position(location)
+        when (reportEntry.severity.toString()){
+            getString(R.string.just_fine) -> marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            getString(R.string.barely_noticeable) -> {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                smellRatingNum = 2
+            }
+            getString(R.string.noticeable) -> {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                smellRatingNum = 3
+            }
+            getString(R.string.its_getting_pretty_bad) -> {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                smellRatingNum = 4
+            }
+            getString(R.string.horrible) -> {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                smellRatingNum = 5
+            }
+        }
+
+        //Get the information associated with the report (ie severity, symptoms, description)
+        val info = "Smell Rating: " + smellRatingNum.toString() + " (" + reportEntry.severity.toString() + ") " +
+                "\nSymptoms: " + reportEntry.symptoms.toString() +
+                "\nSmell Description: " + reportEntry.description.toString()
+        marker.snippet(info)
+
+        //Add the marker to the map
+        mMap.addMarker(marker)
     }
 
     //Custom Info Window to show the info related to the report when clicking on the coordinates of the report
