@@ -97,8 +97,8 @@ android:layout_height="match_parent">
     android:ems="10"
     android:importantForAutofill="no"
     android:inputType="text"
-    android:text="@string/example_industrial_woodsmoke"
-    android:textColor="#B3B3B3"
+    android:hint="@string/example_industrial_woodsmoke"
+    android:textColor="#000000"
     tools:ignore="LabelFor" />
 
 <TextView
@@ -120,8 +120,8 @@ android:layout_height="match_parent">
     android:ems="10"
     android:importantForAutofill="no"
     android:inputType="text"
-    android:text="@string/example_headache_sore_throat"
-    android:textColor="#B3B3B3"
+    android:hint="@string/example_headache_sore_throat"
+    android:textColor="#000000"
     tools:ignore="LabelFor" />
 
 <TextView
@@ -144,8 +144,8 @@ android:layout_height="match_parent">
     android:ems="10"
     android:gravity="start|top"
     android:inputType="textMultiLine"
-    android:text="@string/e_g_if_you_submit_more_than_one_report_in_the_same_day"
-    android:textColor="#B3B3B3"
+    android:hint="@string/e_g_if_you_submit_more_than_one_report_in_the_same_day"
+    android:textColor="#000000"
     tools:ignore="LabelFor"
 
 

@@ -31,8 +31,8 @@ import java.time.LocalDateTime
 
 @IgnoreExtraProperties
 data class Report(
-    var longitude: Double? = 0.0,
     var latitude: Double? = 0.0,
+    var longitude: Double? = 0.0,
     var severity: String? = "",
     var description: String? = "",
     var symptoms: String? = "",
@@ -69,14 +69,35 @@ class MainActivity : AppCompatActivity() {
         //fab.setOnClickListener {
         //    getGeoData()
         //}
-        allReports= mutableListOf()
+
+        allReports = mutableListOf()
+
         database = FirebaseDatabase.getInstance().reference
         // Attach a listener to read the data at our posts reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 allReports = mutableListOf()
+
+                var dblLat: Double?
+                var dblLon: Double?
                 for (messageSnapshot in dataSnapshot.children) {
-                    allReports.add(Report(messageSnapshot.child("longitude").value as Double?, messageSnapshot.child("latitude").value as Double?, messageSnapshot.child("severity").value as String?, messageSnapshot.child("description").value as String?, messageSnapshot.child("symptoms").value as String?, messageSnapshot.child("note").value as String?))
+                    //Checks to allow for evened out coords (eg 31.000 or 100.000)
+                    if (messageSnapshot.child("latitude").value is Long){
+                        dblLat = (messageSnapshot.child("latitude").value as Long).toDouble()
+                    } else {
+                        dblLat = messageSnapshot.child("latitude").value as Double?
+                    }
+                    if (messageSnapshot.child("longitude").value is Long){
+                        dblLon = (messageSnapshot.child("longitude").value as Long).toDouble()
+                    } else {
+                        dblLon = messageSnapshot.child("longitude").value as Double?
+                    }
+
+                    allReports.add(Report(dblLat, dblLon,
+                        messageSnapshot.child("severity").value as String?,
+                        messageSnapshot.child("description").value as String?,
+                        messageSnapshot.child("symptoms").value as String?,
+                        messageSnapshot.child("note").value as String?))
                 }
 
             }
@@ -86,22 +107,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+    
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {

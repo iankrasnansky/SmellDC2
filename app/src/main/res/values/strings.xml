@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">Test</string>
+    <string name="app_name">Smell-DC2</string>
     <string name="title_report">Submit Report</string>
     <string name="title_map">Map</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
     <string name="how_dows_your_air_smell_right_now">How does your air smell right now?</string>
     <string name="just_fine">Just Fine!</string>
