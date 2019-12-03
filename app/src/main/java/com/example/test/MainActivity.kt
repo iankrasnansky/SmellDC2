@@ -30,7 +30,14 @@ import kotlin.math.log
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
-
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.location.LocationManager
+import android.os.Looper
 
 
 @IgnoreExtraProperties
@@ -125,6 +132,14 @@ class MainActivity : AppCompatActivity() {
         // permissions this app might request
     }
 
+    val mLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            if (locationResult == null) {
+                return
+            }
+        }
+    }
+
     fun getGeoData(){
         var permissionCheck = ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION")
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -135,12 +150,38 @@ class MainActivity : AppCompatActivity() {
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location : Location? ->
-                Log.i("a", location?.altitude.toString())
-                //GRAB DATA FROM FORM INSTEAD OF JUST 0 AND EMPTY STRING
-                val user = Report(location?.latitude, location?.longitude, toSend.severity , toSend.description, toSend.symptoms, toSend.note)
-                database.child((Math.random()).toString().replace(".", "F")).setValue(user)
-                val t = Toast.makeText(this,"Successfully sent report! Thank you for your time!", Toast.LENGTH_LONG)
-                t.show()
+                if(location != null && location!!.accuracy < 70) {
+                    val user = Report(
+                        location?.latitude,
+                        location?.longitude,
+                        toSend.severity,
+                        toSend.description,
+                        toSend.symptoms,
+                        toSend.note
+                    )
+                    database.child((Math.random()).toString().replace(".", "F")).setValue(user)
+                    val t = Toast.makeText(
+                        this,
+                        "Successfully sent report! Thank you for your time!",
+                        Toast.LENGTH_LONG
+                    )
+                    t.show()
+                    fusedLocationClient.removeLocationUpdates(mLocationCallback)
+                }else{
+                    val t = Toast.makeText(
+                        this,
+                        "Location data is insufficiently accurate, please wait and try again.",
+                        Toast.LENGTH_LONG
+                    )
+                    t.show()
+                    val mLocationRequest = LocationRequest.create()
+                    mLocationRequest.interval = 60000
+                    mLocationRequest.fastestInterval = 5000
+                    mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+                    fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback,
+                        Looper.getMainLooper())
+                }
             }
     }
 
