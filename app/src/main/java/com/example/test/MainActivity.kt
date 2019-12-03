@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (messageSnapshot in dataSnapshot.children) {
-                    val long = messageSnapshot.child("longitude").value as Double?
+                    val long = messageSnapshot.child("longitude").value
                     println(long)
                     //val message = messageSnapshot.child("message").value as String?
                 }
