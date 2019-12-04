@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.database.*
+import java.time.LocalDate
 
 //THIS IS THE MAP FRAGMENT
 
@@ -51,6 +52,8 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
                 allReports = mutableListOf()
                 var dblLat: Double?
                 var dblLon: Double?
+                var dayOfYear: Long?
+                var year: Long?
                 for (messageSnapshot in dataSnapshot.children) {
                     //Checks to allow for evened out coords (eg 31.000 or 100.000)
                     if (messageSnapshot.child("latitude").value is Long){
@@ -64,11 +67,22 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
                         dblLon = messageSnapshot.child("longitude").value as Double?
                     }
 
+                    if (messageSnapshot.child("dayOfYear") == null) {
+                        dayOfYear = 0
+                    } else {
+                        dayOfYear = messageSnapshot.child("dayOfYear").value as Long?
+                    }
+                    if (messageSnapshot.child("year") == null) {
+                        year = 0
+                    } else {
+                        year = messageSnapshot.child("year").value as Long?
+                    }
                     val report = Report(dblLat, dblLon,
                         messageSnapshot.child("severity").value as String?,
                         messageSnapshot.child("description").value as String?,
                         messageSnapshot.child("symptoms").value as String?,
-                        messageSnapshot.child("note").value as String?)
+                        messageSnapshot.child("note").value as String?,
+                        dayOfYear, year)
                     allReports.add(report)
                     if (isMapReady){
                         placeMarker(report)
@@ -126,9 +140,14 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
                     "\nSymptoms: " + report.symptoms.toString() +
                     "\nSmell Description: " + report.description.toString()
             marker.snippet(info)
-
+            // Ignore the report if it's more than a week ago
+            var currentDay = LocalDate.now().dayOfYear
+            var currentYear = LocalDate.now().year
+            if (currentYear.toLong() == report.year && currentDay.toLong() - report.dayOfYear as Long <= 7) {
+                mMap.addMarker(marker)
+            }
             //Add the marker to the map
-            mMap.addMarker(marker)
+
 //            mMap.addMarker(MarkerOptions().position(location).snippet(info))
         }
 
@@ -170,9 +189,12 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
                 "\nSymptoms: " + reportEntry.symptoms.toString() +
                 "\nSmell Description: " + reportEntry.description.toString()
         marker.snippet(info)
-
+        var currentDay = LocalDate.now().dayOfYear
+        var currentYear = LocalDate.now().year
+        if (currentYear.toLong() == reportEntry.year && currentDay.toLong() - reportEntry.dayOfYear as Long <= 7) {
+            mMap.addMarker(marker)
+        }
         //Add the marker to the map
-        mMap.addMarker(marker)
     }
 
     //Custom Info Window to show the info related to the report when clicking on the coordinates of the report

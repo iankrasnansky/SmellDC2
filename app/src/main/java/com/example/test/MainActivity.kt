@@ -38,6 +38,8 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.location.LocationManager
 import android.os.Looper
+import java.util.*
+import java.time.LocalDate
 
 
 @IgnoreExtraProperties
@@ -47,7 +49,9 @@ data class Report(
     var severity: String? = "",
     var description: String? = "",
     var symptoms: String? = "",
-    var note: String? = ""
+    var note: String? = "",
+    var dayOfYear: Long? = 0,
+    var year: Long? = 0
 )
 
 class MainActivity : AppCompatActivity() {
@@ -157,7 +161,9 @@ class MainActivity : AppCompatActivity() {
                         toSend.severity,
                         toSend.description,
                         toSend.symptoms,
-                        toSend.note
+                        toSend.note,
+                        LocalDate.now().dayOfYear as Long?,
+                        LocalDate.now().year as Long?
                     )
                     database.child((Math.random()).toString().replace(".", "F")).setValue(user)
                     val t = Toast.makeText(
