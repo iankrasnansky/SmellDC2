@@ -128,9 +128,9 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
         }
 
         //Zoom options
-        var zoomLevel = 3.0f
-        val kansas = LatLng(37.697948, -97.314835) //place the camera over the middle of the US
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kansas, zoomLevel))
+        var zoomLevel = 8.0f
+        val mid = LatLng(39.3343, -76.4394) //place the camera over the middle of maryland
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mid, zoomLevel))
     }
 
     //Custom Info Window to show the info related to the report when clicking on the coordinates of the report
