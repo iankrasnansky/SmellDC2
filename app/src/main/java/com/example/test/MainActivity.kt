@@ -162,8 +162,8 @@ class MainActivity : AppCompatActivity() {
                         toSend.description,
                         toSend.symptoms,
                         toSend.note,
-                        LocalDate.now().dayOfYear as Long?,
-                        LocalDate.now().year as Long?
+                        LocalDate.now().dayOfYear.toLong(),
+                        LocalDate.now().year.toLong()
                     )
                     database.child((Math.random()).toString().replace(".", "F")).setValue(user)
                     val t = Toast.makeText(

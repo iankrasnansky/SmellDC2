@@ -152,8 +152,8 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
         }
 
         //Zoom options
-        var zoomLevel = 3.0f
-        val kansas = LatLng(37.697948, -97.314835) //place the camera over the middle of the US
+        var zoomLevel = 1.0f
+        val kansas = LatLng(37.697948, -77.314835) //place the camera around maryland
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kansas, zoomLevel))
     }
 
